@@ -2,10 +2,6 @@ import streamlit as st
 import requests
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
-
-#user classes
-import MainPage as mp
-
 # Authors: Kat, Rachel, Peterson
 
 # Authentication - without user
@@ -16,18 +12,12 @@ client_credentials_manager = SpotifyClientCredentials(client_id=cid, client_secr
 sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
 
 
-# Streamlit code
-st.title("Peterson Test Spotify ")
-
-
-
-#page selector, choosing a page will go to a corresponding python file
-pageSelect = st.selectbox("choose something", options=["Pop", "Rock", "Neo-Soul"])
-if pageSelect == "Pop":
-    x = mp.MainPage()
+#3 Pages
+#Home/Intro Page - main
+#Choose songs Page - SetUpPage
+#Results Page  - ResultsPage
 
 name = st.text_input('name of artist')
-
 
 results = sp.search(q ='artist:' + name, type='artist')
 items = results['artists']['items']
