@@ -2,6 +2,8 @@ import streamlit as st
 import requests
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
+import pandas as pd
+import numpy as np
 # Authors: Kat, Rachel, Peterson
 
 # Authentication - without user
@@ -12,19 +14,8 @@ client_credentials_manager = SpotifyClientCredentials(client_id=cid, client_secr
 sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
 
 
-#3 Pages
-#Home/Intro Page - main
-#Choose songs Page - SetUpPage
-#Results Page  - ResultsPage
 
-name = st.text_input('name of artist')
 
-results = sp.search(q ='artist:' + name, type='artist')
-items = results['artists']['items']
-if len(items) > 0:
-    artist = items[0]
-    print(artist['name'], artist['images'][0]['url'])
-    st.text(artist['name'])
-    st.text(artist['images'][0]['url'])
-
+bondData = pd.read_csv('JamesBondInformationCSV.csv')
+st.dataframe(bondData)
 
