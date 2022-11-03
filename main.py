@@ -19,7 +19,6 @@ sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
 #Used to get the features of the library songs, stored them in a file so this code is no longer needed
 #library_uris = np.loadtxt("csv/track_library.csv", dtype="str")
 
-
 #song_library_features = []
 
 #for uri in library_uris:
@@ -70,22 +69,19 @@ if song_input:
         if(danceability):
             #get the chosen song's danceability
             song_danceability = song_features['danceability']
+            #how many times does the chosen song match the library songs
             number_of_matches = 0
-            for index, row in song_library_features.iterrows():
-                currentLibrarySongDanceability = row[0]
-                print(currentLibrarySongDanceability)
+            #iterating through all the danceabilities, column #0
+            for index, song in song_library_features.iterrows():
+                currentLibrarySongDanceability = song[0]
                 upper_danceability_range = currentLibrarySongDanceability + (currentLibrarySongDanceability * 0.25)
                 lower_danceability_range = currentLibrarySongDanceability - (currentLibrarySongDanceability * 0.25)
-
-                bounds = np.arange(lower_danceability_range, upper_danceability_range)
-                st.write("The chosen song has a danceability of",song_danceability, "The current library song is:", sp.track(song['uri'])['name'], "which has a danceability of", currentLibrarySongDanceability)
-
+                st.write("The chosen song has a danceability of",song_danceability, "The current library song is:", sp.track(song[13])['name'], "which has a danceability of", currentLibrarySongDanceability)
                 if song_danceability >= lower_danceability_range and song_danceability <= upper_danceability_range:
                     st.write("The chosen song matches!!")
                     number_of_matches += 1
                 else:
                     st.write("The chosen song does NOT match")
-
             st.write("The song matches", number_of_matches, "of the songs in our library of", song_library_size, "songs")
             if number_of_matches / song_library_size >= 0.50:
                 st.write("This song matches in danceability to our library!")
