@@ -17,16 +17,20 @@ sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
 
 
 #Used to get the features of the library songs, stored them in a file so this code is no longer needed
-library_uris = np.loadtxt("csv/track_library.csv", dtype="str")
+#library_uris = np.loadtxt("csv/track_library.csv", dtype="str")
 
 
-song_library_features = []
+#song_library_features = []
 
-for uri in library_uris:
-    track = sp.track(uri)
-    song_library_features.append(sp.audio_features(uri)[0])
+#for uri in library_uris:
+#    track = sp.track(uri)
+#    song_library_features.append(sp.audio_features(uri)[0])
 
+
+song_library_features = pd.read_csv('csv/track_features.csv', sep=',', header=None)
 song_library_size = len(song_library_features)
+
+
 
 # User Interaction
 
@@ -67,8 +71,9 @@ if song_input:
             #get the chosen song's danceability
             song_danceability = song_features['danceability']
             number_of_matches = 0
-            for song in song_library_features:
-                currentLibrarySongDanceability = song['danceability']
+            for index, row in song_library_features.iterrows():
+                currentLibrarySongDanceability = row[0]
+                print(currentLibrarySongDanceability)
                 upper_danceability_range = currentLibrarySongDanceability + (currentLibrarySongDanceability * 0.25)
                 lower_danceability_range = currentLibrarySongDanceability - (currentLibrarySongDanceability * 0.25)
 
