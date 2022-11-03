@@ -28,7 +28,7 @@ sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
 
 song_library_features = pd.read_csv('csv/track_features.csv', sep=',', header=None)
 song_library_size = len(song_library_features)
-
+feature_variation_percentage = 0.25
 
 
 # User Interaction
@@ -73,10 +73,13 @@ if song_input:
             number_of_matches = 0
             #iterating through all the danceabilities, column #0
             for index, song in song_library_features.iterrows():
+                #getting the danceability feature
                 currentLibrarySongDanceability = song[0]
-                upper_danceability_range = currentLibrarySongDanceability + (currentLibrarySongDanceability * 0.25)
-                lower_danceability_range = currentLibrarySongDanceability - (currentLibrarySongDanceability * 0.25)
-                st.write("The chosen song has a danceability of",song_danceability, "The current library song is:", sp.track(song[13])['name'], "which has a danceability of", currentLibrarySongDanceability)
+                #creating ranges for how much the chosen song can vary from the library song
+                upper_danceability_range = currentLibrarySongDanceability + (currentLibrarySongDanceability * feature_variation_percentage)
+                lower_danceability_range = currentLibrarySongDanceability - (currentLibrarySongDanceability * feature_variation_percentage)
+
+                #st.write("The chosen song has a danceability of",song_danceability, "The current library song is:", sp.track(song[13])['name'], "which has a danceability of", currentLibrarySongDanceability)
                 if song_danceability >= lower_danceability_range and song_danceability <= upper_danceability_range:
                     st.write("The chosen song matches!!")
                     number_of_matches += 1
