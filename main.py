@@ -26,6 +26,8 @@ for uri in library_uris:
     track = sp.track(uri)
     song_library_features.append(sp.audio_features(uri)[0])
 
+song_library_size = len(song_library_features)
+
 # User Interaction
 
 st.title("Is this song a James Bond song?")
@@ -60,9 +62,30 @@ if song_input:
 
         danceability = st.checkbox("View danceability")
 
+        #If the user has chosen to view the danceability feature
+        if(danceability):
+            #get the chosen song's danceability
+            song_danceability = song_features['danceability']
+            number_of_matches = 0
+            for song in song_library_features:
+                currentLibrarySongDanceability = song['danceability']
+                upper_danceability_range = currentLibrarySongDanceability + (currentLibrarySongDanceability * 0.25)
+                lower_danceability_range = currentLibrarySongDanceability - (currentLibrarySongDanceability * 0.25)
 
-        st.write(song_library_features[0]['danceability'])
+                bounds = np.arange(lower_danceability_range, upper_danceability_range)
+                st.write("The chosen song has a danceability of",song_danceability, "The current library song is:", sp.track(song['uri'])['name'], "which has a danceability of", currentLibrarySongDanceability)
 
+                if song_danceability >= lower_danceability_range and song_danceability <= upper_danceability_range:
+                    st.write("The chosen song matches!!")
+                    number_of_matches += 1
+                else:
+                    st.write("The chosen song does NOT match")
+
+            st.write("The song matches", number_of_matches, "of the songs in our library of", song_library_size, "songs")
+            if number_of_matches / song_library_size >= 0.50:
+                st.write("This song matches in danceability to our library!")
+            else:
+                st.write("This song does NOT match in danceability to our library!")
     else:
         st.write("Sorry, we could not find that song on our database :( Please try a different search!")
 
