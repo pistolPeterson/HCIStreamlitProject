@@ -28,7 +28,42 @@ sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
 
 song_library_features = pd.read_csv('csv/track_features.csv', sep=',', header=None)
 song_library_size = len(song_library_features)
-feature_variation_percentage = 0.25
+
+
+feature_variation_percentage = 0.35
+library_matches_percentage = 0.50
+number_of_matches = 0
+
+
+def isFeatureInBounds(libraryfeature, chosenSongFeature):
+    upper_feature_range = libraryfeature + (
+                libraryfeature * feature_variation_percentage)
+    lower_feature_range = libraryfeature - (
+                libraryfeature * feature_variation_percentage)
+    return 1 if(chosenSongFeature >= lower_feature_range and chosenSongFeature <= upper_feature_range) else 0
+
+
+
+def compareFeature(featureName, featureIndex):
+    matches = 0
+    # get the chosen song's feature
+    songFeature = song_features[featureName]
+
+    # iterating through the specified feature of all library songs
+    for index, song in song_library_features.iterrows():
+        # getting the library feature
+        currentLibrarySongFeature = song[featureIndex]
+        print(currentLibrarySongFeature, songFeature)
+        matches += isFeatureInBounds(currentLibrarySongFeature, songFeature)
+
+    st.write("The song matches", matches, "of the songs in our library of",
+             song_library_size, "songs")
+
+    #if the number of matches to the library exceeds or equals the given percentage value
+    if matches / song_library_size >= library_matches_percentage:
+        st.success(("This song matches in", featureName, " to our library!"))
+    else:
+        st.warning(("This song does NOT match in", featureName, " to our library!"))
 
 
 # User Interaction
@@ -46,54 +81,65 @@ song_results =  sp.search(q ='track:' + song_input, type='track')
 items_array = song_results["tracks"]["items"]
 
 #specify the first result as our chosen song
-song_uri = items_array[0]['uri']
+if len(items_array) > 0:
+    song_uri = items_array[0]['uri']
 
+    #if the song uri has been acquired and the input is correct
+    if song_input:
+        if song_uri:
+            # get the track object from the given uri
+            song = sp.track(song_uri)
+            artist_info = song['artists']
+            st.write('You have chosen the song:', song['name'], "by", artist_info[0]['name'])
+            st.write('Here are some of your songs categories')
+            song_features = sp.audio_features(song_uri)[0]
+            st.write(song_features)
 
-#if the song uri has been acquired
-if song_input:
-    if song_uri:
-        # get the track object from the given uri
-        song = sp.track(song_uri)
-        artist_info = song['artists']
-        st.write('You have chosen the song:', song['name'], "by", artist_info[0]['name'])
-        st.write('Here are some of your songs categories')
-        song_features = sp.audio_features(song_uri)[0]
-        st.write(song_features)
+            danceability = st.checkbox("View Danceability")
+            if(danceability):
+                compareFeature('danceability', 0)
 
+            energy = st.checkbox("View Energy")
+            if(energy):
+               compareFeature('energy', 1)
 
-        st.write("We will now analyze your song's details with our library, please wait!")
+            key = st.checkbox("View Key")
+            if(key):
+                compareFeature('key', 2)
 
-        danceability = st.checkbox("View danceability")
+            loudness = st.checkbox("View Loudness")
+            if(loudness):
+               compareFeature('loudness', 3)
 
-        #If the user has chosen to view the danceability feature
-        if(danceability):
-            #get the chosen song's danceability
-            song_danceability = song_features['danceability']
-            #how many times does the chosen song match the library songs
-            number_of_matches = 0
-            #iterating through all the danceabilities, column #0
-            for index, song in song_library_features.iterrows():
-                #getting the danceability feature
-                currentLibrarySongDanceability = song[0]
-                #creating ranges for how much the chosen song can vary from the library song
-                upper_danceability_range = currentLibrarySongDanceability + (currentLibrarySongDanceability * feature_variation_percentage)
-                lower_danceability_range = currentLibrarySongDanceability - (currentLibrarySongDanceability * feature_variation_percentage)
+            mode = st.checkbox("View Mode")
+            if(mode):
+               compareFeature('mode', 4)
 
-                #st.write("The chosen song has a danceability of",song_danceability, "The current library song is:", sp.track(song[13])['name'], "which has a danceability of", currentLibrarySongDanceability)
-                if song_danceability >= lower_danceability_range and song_danceability <= upper_danceability_range:
-                    st.write("The chosen song matches!!")
-                    number_of_matches += 1
-                else:
-                    st.write("The chosen song does NOT match")
-            st.write("The song matches", number_of_matches, "of the songs in our library of", song_library_size, "songs")
-            if number_of_matches / song_library_size >= 0.50:
-                st.write("This song matches in danceability to our library!")
-            else:
-                st.write("This song does NOT match in danceability to our library!")
-    else:
-        st.write("Sorry, we could not find that song on our database :( Please try a different search!")
+            speechiness = st.checkbox("View Speechiness")
+            if(speechiness):
+              compareFeature('speechiness', 5)
 
+            acousticness = st.checkbox("View Acousticness")
+            if(acousticness):
+                compareFeature('acousticness', 6)
 
+            instrumentalness = st.checkbox("View Instrumentalness")
+            if(instrumentalness):
+                compareFeature('instrumentalness', 7)
+
+            liveness = st.checkbox("View Liveness")
+            if(liveness):
+                compareFeature('liveness', 8)
+
+            valence = st.checkbox("View Valence")
+            if(valence):
+                compareFeature('valence', 9)
+
+            tempo = st.checkbox("View Tempo")
+            if(tempo):
+                compareFeature('tempo', 10)
+else:
+    st.error("Sorry, we could not find that song on our database :( Please try a different search!")
 
 
 #bondData = pd.read_csv('JamesBondInformationCSV.csv')

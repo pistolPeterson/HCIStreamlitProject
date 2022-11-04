@@ -7,6 +7,7 @@ import numpy as np
 
 table = pd.read_csv('csv/bond info.csv')
 
+
 st.title("The History of 007 Music")
 st.subheader("'The Name's Bond. James Bond.'")
 
@@ -106,5 +107,34 @@ map_data = pd.DataFrame(
     columns=['lat', 'lon'])
 st.map(map_data)
 st.caption("This map shows which countries the films were shot in.")
+
+st.subheader('''Know Your Bonds'?''')
+col1, col2 = st.columns(2)
+
+with col1:
+    options = []
+    for row in table['Actor']:
+        if row:
+            options.append(row)
+
+    option = st.selectbox(
+        "Select an actor.",
+        (np.unique(options))
+    )
+
+with col2:
+    if option == 'Sean Connery':
+        st.image("https://m.media-amazon.com/images/M/MV5BNWNjNGU5ZjUtMzc0MC00MWY5LTkxMGUtMjcxZmM2MDYzYzQ4XkEyXkFqcGdeQXVyMjUzOTY1NTc@._V1_.jpg")
+    if option == 'George Lazenby':
+        st.image("https://m.media-amazon.com/images/M/MV5BZGFlNGNiMmQtMThhZS00MWMxLWFiNGItZTM4ZmJlODM3ZmU2XkEyXkFqcGdeQXVyNDY2MTk1ODk@._V1_.jpg")
+    if option == 'Roger Moore':
+        st.image("https://static.posters.cz/image/750/posters/james-bond-007-a-view-to-a-kill-i3427.jpg")
+    if option == 'Timothy Dalton':
+        st.image("https://cdna.artstation.com/p/assets/images/images/032/200/826/large/george-wetton-asset.jpg?1605746966")
+    if option == "Pierce Brosnan":
+        st.image("https://m.media-amazon.com/images/M/MV5BODNkYmIwYTMtYzdhNy00YWE3LThkYmEtNzA5ZTE5YmVjYzZlXkEyXkFqcGdeQXVyNTIzOTk5ODM@._V1_.jpg")
+    if option == "Daniel Craig":
+        st.image("https://m.media-amazon.com/images/M/MV5BYmI3MmMzMGMtNzc4Ni00YWQ4LWFkMDYtNjVlOWU3ZGZiNjY1XkEyXkFqcGdeQXVyNDQ2MTMzODA@._V1_.jpg")
+
 
 
