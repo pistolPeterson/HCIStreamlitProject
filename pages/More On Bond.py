@@ -13,16 +13,20 @@ st.header("'The Name's Bond. James Bond.'")
 radio_names = ['Timeline', 'In Detail']
 radio = st.radio('', radio_names)
 
+number_of_movies = 0
+
 if radio == 'Timeline':
     min_year = int(table['Year'].min())
     max_year = int(table['Year'].max())
     timeline = st.slider("Pick a year",
                          min_year, max_year)
-    index = int(table[table['Year']==timeline].index.values)
-    for each in table['Year']:
-        if each == timeline:
-            st.write(table.loc[index, "Title song"], " was written in ", timeline," for ", table.loc[index, "Film"],".")
 
+    for index, song in table.iterrows():
+        if table['Year'][index] == timeline:
+            st.write(table['Title song'][index], "was written in", table['Year'][index], "for", table['Film'][index])
+            number_of_movies += 1
+    if number_of_movies is 0:
+            st.write("No James Bond movie was released at this time.")
 else:
     st.dataframe(table)
     st.caption('Films sorted by release date.')
