@@ -8,7 +8,7 @@ import numpy as np
 table = pd.read_csv('csv/bond info.csv')
 
 st.title("The History of 007 Music")
-st.header("'The Name's Bond. James Bond.'")
+st.subheader("'The Name's Bond. James Bond.'")
 
 radio_names = ['Timeline', 'In Detail']
 radio = st.radio('', radio_names)
@@ -31,7 +31,7 @@ else:
     st.dataframe(table)
     st.caption('Films sorted by release date.')
 
-st.header("Where were all the Bond movies shot?")
+st.subheader("Where were all the Bond movies shot?")
 
 map_data = pd.DataFrame(
     np.array([
