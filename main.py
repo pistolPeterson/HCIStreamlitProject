@@ -34,6 +34,7 @@ feature_variation_percentage = 0.50
 library_matches_percentage = 0.50
 overall_score_percentage = 0.80
 number_of_features = 11
+see_score = False
 
 
 def isFeatureInBounds(libraryfeature, chosenSongFeature):
@@ -67,14 +68,6 @@ def compareFeature(featureName, featureIndex):
         st.warning(("This song does NOT match in", featureName, " to our library!"))
 
     return matches
-
-def showScore():
-    st.write("Your song's 'James Bondness' is...")
-    st.progress(overall_score)
-    if overall_score >= overall_score_percentage:
-        st.balloons()
-    st.write(int(overall_score * 100), "% !")
-
 
 # User Interaction
 
@@ -149,8 +142,13 @@ if len(items_array) > 0:
             number_of_matches += compareFeature('tempo', 10)
 
             overall_score = number_of_matches / (song_library_size * number_of_features)
-            st.button("I'm ready to see my song's score!", on_click=showScore)
-
+            score_button = st.button("I'm ready to see my song's score!")
+            if(score_button):
+                st.write("Your song's 'James Bondness' is...")
+                st.progress(overall_score)
+                if overall_score >= overall_score_percentage:
+                    st.balloons()
+                st.write(int(overall_score * 100), "% !")
 
 
 else:
