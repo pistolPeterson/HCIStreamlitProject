@@ -68,6 +68,13 @@ def compareFeature(featureName, featureIndex):
 
     return matches
 
+def showScore():
+    st.write("Your song's 'James Bondness' is...")
+    st.progress(overall_score)
+    if overall_score >= overall_score_percentage:
+        st.balloons()
+    st.write(int(overall_score * 100), "% !")
+
 
 # User Interaction
 
@@ -99,6 +106,20 @@ if len(items_array) > 0:
             song_features = sp.audio_features(song_uri)[0]
             st.write(song_features)
 
+            library_popularities = np.loadtxt("csv/track_popularities", dtype="str")
+
+            song_indexes = []
+            for num in range(0, 24):
+                song_indexes.append(num)
+
+            chart_data = pd.DataFrame(
+                library_popularities,
+                columns=[1])
+
+            st.bar_chart(chart_data)
+
+
+
             number_of_matches = 0
 
             number_of_matches += compareFeature('danceability', 0)
@@ -128,14 +149,9 @@ if len(items_array) > 0:
             number_of_matches += compareFeature('tempo', 10)
 
             overall_score = number_of_matches / (song_library_size * number_of_features)
-            st.write("Your song's 'James Bondness' is...")
+            st.button("I'm ready to see my song's score!", on_click=showScore)
 
-            ready_to_see_score = st.checkbox("I'm ready to see my song's score!")
-            if(ready_to_see_score):
-                st.progress(overall_score)
-                if overall_score >= overall_score_percentage:
-                    st.balloons()
-                st.write(int(overall_score * 100), "% !")
+
 
 else:
     st.error("Sorry, we could not find that song on our database :( Please try a different search!")
