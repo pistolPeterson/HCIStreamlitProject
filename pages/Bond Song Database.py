@@ -24,12 +24,18 @@ for spotify_uri in results:
     if sp.track(spotify_uri)['preview_url'] is None:
         results.remove(spotify_uri)
 
+name_of_uri = results
+for i in range(0, len(name_of_uri)):
+    name_of_uri[i] = sp.track(results[i])['name']
+
 #place the results in streamlit multiselct widget
 options = st.multiselect(
     'What samples do you want to listen to?',
-    results)
+    name_of_uri)
 
 #show what the user selected
 for x in options:
-    st.write(sp.track(x)['preview_url'])
+    #convert name back to a uri
+    searched_track = sp.search(x, limit=1, offset=0, type='track', market=None)
+    st.write(sp.track(searched_track['name'])['preview_url'])
 
