@@ -17,7 +17,7 @@ sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
 
 
 #Used to get the features of the library songs, stored them in a file so this code is no longer needed
-#library_uris = np.loadtxt("csv/track_library.csv", dtype="str")
+library_uris = np.loadtxt("csv/track_library.csv", dtype="str")
 
 #song_library_features = []
 
@@ -95,6 +95,17 @@ if len(items_array) > 0:
             song_features = sp.audio_features(song_uri)[0]
             st.write(song_features)
 
+            library_popularities = np.loadtxt("csv/track_popularities", dtype="str")
+
+            song_indexes = []
+            for num in range(0,24):
+                song_indexes.append(num)
+
+            chart_data = pd.DataFrame(
+                library_popularities,
+                columns=[1])
+
+            st.bar_chart(chart_data)
             danceability = st.checkbox("View Danceability")
             if(danceability):
                 compareFeature('danceability', 0)
