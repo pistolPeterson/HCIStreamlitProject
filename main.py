@@ -30,11 +30,10 @@ song_library_features = pd.read_csv('csv/track_features.csv', sep=',', header=No
 song_library_size = len(song_library_features)
 
 
-feature_variation_percentage = 0.50
-library_matches_percentage = 0.50
+feature_variation_percentage = 0.70
+library_matches_percentage = 0.70
 overall_score_percentage = 0.80
 number_of_features = 11
-see_score = False
 
 
 def isFeatureInBounds(libraryfeature, chosenSongFeature):
@@ -42,7 +41,8 @@ def isFeatureInBounds(libraryfeature, chosenSongFeature):
                 libraryfeature * feature_variation_percentage)
     lower_feature_range = libraryfeature - (
                 libraryfeature * feature_variation_percentage)
-    return 1 if(chosenSongFeature >= abs(lower_feature_range) and chosenSongFeature <= abs(upper_feature_range)) else 0
+
+    return 1 if(abs(chosenSongFeature) >= abs(lower_feature_range) and abs(chosenSongFeature) <= abs(upper_feature_range)) else 0
 
 
 
