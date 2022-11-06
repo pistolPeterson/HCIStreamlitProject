@@ -39,7 +39,7 @@ else:
     col1, col2 = st.columns(2)
     with col1:
         st.bar_chart(chart_data)
-        st.caption("Popularity scores throughout the years.")
+        st.caption("Current day popularity scores of the 24 songs in our James Bond library.")
     with col2:
         st.line_chart(chart_data)
 
