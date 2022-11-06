@@ -99,19 +99,9 @@ if len(items_array) > 0:
             song_features = sp.audio_features(song_uri)[0]
             st.write(song_features)
 
-            library_popularities = np.loadtxt("csv/track_popularities", dtype="str")
-
             song_indexes = []
             for num in range(0, 24):
                 song_indexes.append(num)
-
-            chart_data = pd.DataFrame(
-                library_popularities,
-                columns=[1])
-
-            st.bar_chart(chart_data)
-
-
 
             number_of_matches = 0
 
