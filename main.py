@@ -30,11 +30,10 @@ song_library_features = pd.read_csv('csv/track_features.csv', sep=',', header=No
 song_library_size = len(song_library_features)
 
 
-feature_variation_percentage = 0.50
-library_matches_percentage = 0.50
+feature_variation_percentage = 0.70
+library_matches_percentage = 0.70
 overall_score_percentage = 0.80
 number_of_features = 11
-see_score = False
 
 
 def isFeatureInBounds(libraryfeature, chosenSongFeature):
@@ -42,7 +41,8 @@ def isFeatureInBounds(libraryfeature, chosenSongFeature):
                 libraryfeature * feature_variation_percentage)
     lower_feature_range = libraryfeature - (
                 libraryfeature * feature_variation_percentage)
-    return 1 if(chosenSongFeature >= abs(lower_feature_range) and chosenSongFeature <= abs(upper_feature_range)) else 0
+
+    return 1 if(abs(chosenSongFeature) >= abs(lower_feature_range) and abs(chosenSongFeature) <= abs(upper_feature_range)) else 0
 
 
 
@@ -97,11 +97,19 @@ if len(items_array) > 0:
             st.write('You have chosen the song:', song['name'], "by", artist_info[0]['name'])
             st.write('Here are some of your songs statistics from Spotify!')
             song_features = sp.audio_features(song_uri)[0]
-            st.write(song_features)
 
-            song_indexes = []
-            for num in range(0, 24):
-                song_indexes.append(num)
+            st.write("Danceability:", song_features['danceability'])
+            st.write("Energy:", song_features['energy'])
+            st.write("Key:", song_features['key'])
+            st.write("Loudness:", song_features['loudness'])
+            st.write("Mode:", song_features['mode'])
+            st.write("Speechiness:", song_features['speechiness'])
+            st.write("Acousticness:", song_features['acousticness'])
+            st.write("Instrumentalness:", song_features['instrumentalness'])
+            st.write("Liveness:", song_features['liveness'])
+            st.write("Valence:", song_features['valence'])
+            st.write("Tempo:", song_features['tempo'])
+
 
             number_of_matches = 0
 
