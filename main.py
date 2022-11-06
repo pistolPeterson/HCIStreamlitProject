@@ -97,20 +97,18 @@ if len(items_array) > 0:
             st.write('You have chosen the song:', song['name'], "by", artist_info[0]['name'])
             st.write('Here are some of your songs statistics from Spotify!')
             song_features = sp.audio_features(song_uri)[0]
-            st.write(song_features)
 
-            library_popularities = np.loadtxt("csv/track_popularities", dtype="str")
-
-            song_indexes = []
-            for num in range(0, 24):
-                song_indexes.append(num)
-
-            chart_data = pd.DataFrame(
-                library_popularities,
-                columns=[1])
-
-            st.bar_chart(chart_data)
-
+            st.write("Danceability:", song_features['danceability'])
+            st.write("Energy:", song_features['energy'])
+            st.write("Key:", song_features['key'])
+            st.write("Loudness:", song_features['loudness'])
+            st.write("Mode:", song_features['mode'])
+            st.write("Speechiness:", song_features['speechiness'])
+            st.write("Acousticness:", song_features['acousticness'])
+            st.write("Instrumentalness:", song_features['instrumentalness'])
+            st.write("Liveness:", song_features['liveness'])
+            st.write("Valence:", song_features['valence'])
+            st.write("Tempo:", song_features['tempo'])
 
 
             number_of_matches = 0
